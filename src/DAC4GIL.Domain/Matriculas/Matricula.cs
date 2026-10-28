@@ -1,4 +1,5 @@
-﻿using DAC4GIL.Domain.Core.Model;
+using DAC4GIL.Domain.Core.Model;
+using DAC4GIL.Domain.Core.Exceptions;
 
 namespace DAC4GIL.Domain.Matriculas
 {
@@ -35,46 +36,61 @@ namespace DAC4GIL.Domain.Matriculas
             int outrasSituacoes)
         {
             if (anoReferencia < 2018)
-                throw new DomainException("O Ano de referência deve ser maior ou igual a 2018");
+                throw new DomainExceptions("O Ano de referência deve ser maior ou igual a 2018");
 
-            if (string.IsNullOrEmpty(nomeMunicipio))
-                throw new DomainException("O Nome do Municipio não pode ser nulo");
+            if (string.IsNullOrWhiteSpace(nomeMunicipio))
+                throw new DomainExceptions("O Nome do Municipio não pode ser nulo");
 
-            if (string.IsNullOrEmpty(nomeUnidadeEscolar))
-                throw new DomainException("O Nome da unidade escolar não pode ser nulo");
+            if (string.IsNullOrWhiteSpace(nomeUnidadeEscolar))
+                throw new DomainExceptions("O Nome da unidade escolar não pode ser nulo");
 
             if (matriculasTotal < 0)
-                throw new DomainException("O total de matriculas não pode ser negativa");
+                throw new DomainExceptions("O total de matriculas não pode ser negativa");
 
             if (matriculaInicial < 0)
-                throw new DomainException("O total de matriculas iniciais não pode ser negativa");
+                throw new DomainExceptions("O total de matriculas iniciais não pode ser negativa");
 
             if (matriculaAposCenso < 0)
-                throw new DomainException("O total de matriculas apos censo não pode ser negativa");
+                throw new DomainExceptions("O total de matriculas apos censo não pode ser negativa");
 
             if (transferidos < 0)
-                throw new DomainException("O total de transferidos não pode ser negativa");
+                throw new DomainExceptions("O total de transferidos não pode ser negativa");
 
             if (cancelados < 0)
-                throw new DomainException("O total de matriculas canceladas não pode ser negativa");
+                throw new DomainExceptions("O total de matriculas canceladas não pode ser negativa");
 
             if (falecido < 0)
-                throw new DomainException("O total de falecidos não pode ser negativa");
+                throw new DomainExceptions("O total de falecidos não pode ser negativa");
 
             if (abandono < 0)
-                throw new DomainException("O total de abandonos não pode ser negativa");
+                throw new DomainExceptions("O total de abandonos não pode ser negativa");
 
             if (aprovados < 0)
-                throw new DomainException("O total de aprovados não pode ser negativa");
+                throw new DomainExceptions("O total de aprovados não pode ser negativa");
 
             if (reprovados < 0)
-                throw new DomainException("O total de reprovados não pode ser negativa");
+                throw new DomainExceptions("O total de reprovados não pode ser negativa");
 
             if (cursando < 0)
-                throw new DomainException("O total de cursando não pode ser negativa");
+                throw new DomainExceptions("O total de cursando não pode ser negativa");
 
             if (outrasSituacoes < 0)
-                throw new DomainException("O total de outras situações não pode ser negativa");
+                throw new DomainExceptions("O total de outras situações não pode ser negativa");
+
+            AnoReferencia = anoReferencia;
+            NomeMunicipio = nomeMunicipio;
+            NomeUnidadeEscolar = nomeUnidadeEscolar;
+            MatriculasTotal = matriculasTotal;
+            MatriculaInicial = matriculaInicial;
+            MatriculaAposCenso = matriculaAposCenso;
+            Transferidos = transferidos;
+            Cancelados = cancelados;
+            Falecido = falecido;
+            Abandono = abandono;
+            Aprovados = aprovados;
+            Reprovados = reprovados;
+            Cursando = cursando;
+            OutrasSituacoes = outrasSituacoes;
         }
     }
 }

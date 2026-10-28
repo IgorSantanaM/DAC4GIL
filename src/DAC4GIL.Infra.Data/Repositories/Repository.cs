@@ -1,4 +1,4 @@
-﻿using DAC4GIL.Domain.Core.Model;
+using DAC4GIL.Domain.Core.Model;
 using DAC4GIL.Domain.Core.Repository;
 using DAC4GIL.Infra.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -26,9 +26,14 @@ namespace DAC4GIL.Infra.Data.Repositories
             _dbSet.Remove(entity);
         }
 
+        public async Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
+        {
+            return await _dbSet.ToListAsync(cancellationToken);
+        }
+
         public async Task<TEntity?> GetByIdAsync(TId id, CancellationToken cancellationToken = default)
         {
-            return await _dbSet.FindAsync(id, cancellationToken);
+            return await _dbSet.FindAsync(new object[] { id }, cancellationToken);
         }
 
         public void Update(TEntity entity)

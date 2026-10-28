@@ -10,6 +10,7 @@ namespace DAC4GIL.Domain.Core.Repository
         public Task<TEntity?> GetByIdAsync(TId id, CancellationToken cancellationToken = default);
         public Task AddAsync(TEntity entity, CancellationToken cancellationToken = default);
         public void Update(TEntity entity);
-        public void Delete(TEntity entity); 
+        public void Delete(TEntity entity);
+        public Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken = default);
     }
 }

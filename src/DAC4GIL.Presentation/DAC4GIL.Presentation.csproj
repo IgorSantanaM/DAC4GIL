@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.2.3" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.13" />
   </ItemGroup>
 
@@ -14,4 +15,7 @@
     <ProjectReference Include="..\DAC4GIL.Application\DAC4GIL.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DAC4GIL.Infra.CrossCutting\DAC4GIL.Infra.CrossCutting.csproj" />
+  </ItemGroup>
 </Project>

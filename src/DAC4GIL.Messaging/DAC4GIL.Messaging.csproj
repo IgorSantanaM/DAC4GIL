@@ -15,4 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DAC4GIL.Domain\DAC4GIL.Domain.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DAC4GIL.Infra.CrossCutting\DAC4GIL.Infra.CrossCutting.csproj" />
+  </ItemGroup>
 </Project>
