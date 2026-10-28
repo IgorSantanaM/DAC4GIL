@@ -1,0 +1,22 @@
+<Solution>
+  <Folder Name="/1-Presentation/">
+    <Project Path="src/DAC4GIL.Presentation/DAC4GIL.Presentation.csproj" Id="1ab59526-64a4-49dc-b520-dd9692e57b0f" />
+  </Folder>
+  <Folder Name="/2-Application/">
+    <Project Path="src/DAC4GIL.Application/DAC4GIL.Application.csproj" Id="04e59d96-fbed-499c-babd-e6dcc726a942" />
+  </Folder>
+  <Folder Name="/3-Domain/">
+    <Project Path="src/DAC4GIL.Domain.Core/DAC4GIL.Domain.Core.csproj" />
+    <Project Path="src/DAC4GIL.Domain/DAC4GIL.Domain.csproj" />
+  </Folder>
+  <Folder Name="/4-Infra/" />
+  <Folder Name="/4-Infra/4.1-Data/">
+    <Project Path="src/DAC4GIL.Infra.Data/DAC4GIL.Infra.Data.csproj" Id="0c1c1119-ce6e-4253-acc9-352656c18f0c" />
+  </Folder>
+  <Folder Name="/4-Infra/4.2-Messaging/">
+    <Project Path="src/DAC4GIL.Messaging/DAC4GIL.Messaging.csproj" Id="15fb2ee0-4e8d-4007-b301-9231c93b0b18" />
+  </Folder>
+  <Folder Name="/4-Infra/4.3-CrossCutting/">
+    <Project Path="src/DAC4GIL.Infra.CrossCutting/DAC4GIL.Infra.CrossCutting.csproj" Id="335304c6-9659-48ba-9bd1-09a4dc304a13" />
+  </Folder>
+</Solution>
