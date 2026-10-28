@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Matriculas\Queries\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="EasyNetQ" Version="8.1.11" />
     <PackageReference Include="MediatR" Version="14.2.0" />
   </ItemGroup>

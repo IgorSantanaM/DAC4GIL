@@ -9,21 +9,14 @@ namespace DAC4GIL.Messaging
     {
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
+            var bus = service.GetRequiredService<IBus>();
+            await using var subscription = await bus.PubSub.SubscribeAsync<List<GenericMessageDTO>>("matriculas",
+                (data, token) => AddToDatabase(data, token), _ => { }, cancellationToken: stoppingToken);
+            try
             {
-                try
-                {
-                    using var scope = service.CreateScope();
-                    var bus = scope.ServiceProvider.GetRequiredService<IBus>();
-
-                    await bus.PubSub.SubscribeAsync<List<GenericMessageDTO>>("matriculas",
-                        async data => await AddToDatabase(data, stoppingToken));
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message}");
-                }
+                await Task.Delay(Timeout.Infinite, stoppingToken);
             }
+            catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested) { }
         }
 
         private async Task AddToDatabase(List<GenericMessageDTO> data, CancellationToken stoppingToken)
@@ -47,7 +40,7 @@ namespace DAC4GIL.Messaging
                     item.Reprovados,
                     item.Cursando,
                     item.OutrasSituacoes);
-                await matriculaRepository.AddAsync(matricula);
+                await matriculaRepository.AddAsync(matricula, stoppingToken);
             }
             await unitOfWork.SaveChangesAsync(stoppingToken);
         }
