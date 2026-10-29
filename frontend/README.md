@@ -31,7 +31,7 @@ O primeiro comando sobe o PostgreSQL e o RabbitMQ; os outros dois rodam o worker
 Para carregar os dados no banco, importe os CSVs da pasta `dados/csv/`, na raiz do repositório, em "Backend & importação" ou pelo Swagger.
 
 - A importação é processada em segundo plano, pelo RabbitMQ. Os dados aparecem no painel depois de recarregar a página.
-- Importar o mesmo arquivo duas vezes duplica os registros no banco. O painel ignora as duplicatas, mas o banco não.
+- Cada ano só pode ser importado uma vez. Se o banco já tiver dados de algum ano do arquivo, a API responde 409 e não importa nada; o painel avisa quando isso acontece.
 
 ## Funcionalidades
 
