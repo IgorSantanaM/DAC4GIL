@@ -131,16 +131,22 @@
     const arquivo = $("#cfg-arquivo").files[0];
     const status = $("#cfg-import-status");
     if (!arquivo) { status.textContent = "Selecione um arquivo CSV."; return; }
-    let novas;
+    let linhas, novas;
     try {
-      novas = repo.adicionar(lerCsv(await arquivo.text()));
+      linhas = lerCsv(await arquivo.text());
+      novas = repo.adicionar(linhas);
     } catch (e) {
       status.textContent = "CSV inválido: " + e.message;
       return;
     }
+    const anos = [...new Set(linhas.map((l) => Number(l.AnoReferencia)))].sort((a, b) => a - b);
     let msgApi;
-    try { await ApiDAC.importarCsv(arquivo); msgApi = "enviado à API"; }
-    catch (e) { msgApi = `API não recebeu (${e.message})`; }
+    try { await ApiDAC.importarCsv(arquivo); msgApi = "enviado à API (o banco é atualizado em segundo plano)"; }
+    catch (e) {
+      msgApi = e.status !== 409 ? `API não recebeu (${e.message})`
+        : anos.length === 1 ? `a API não importou porque o banco já tem dados de ${anos[0]}`
+        : `a API não importou porque o banco já tem dados de pelo menos um destes anos: ${anos.join(", ")}`;
+    }
     status.textContent = `${fmtInt.format(novas)} registros novos no painel; ${msgApi}.`;
     montarFiltros();
     renderizar();
