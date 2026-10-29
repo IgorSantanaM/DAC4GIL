@@ -155,7 +155,12 @@
       const form = new FormData();
       form.append("file", arquivo);
       const resp = await buscarComTempo(`${this.url}/api/matriculas/import-csv`, { method: "POST", body: form }, 30000);
-      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      if (!resp.ok) {
+        // 409: o backend recusa a importação quando algum ano do arquivo já está no banco
+        const erro = new Error(resp.status === 409 ? "ano já existe no banco" : `HTTP ${resp.status}`);
+        erro.status = resp.status;
+        throw erro;
+      }
       return resp.text();
     },
   };
