@@ -11,6 +11,6 @@ var host = builder.Build();
 if (host.Services.GetRequiredService<IHostEnvironment>().IsDevelopment())
 {
     using var scope = host.Services.CreateScope();
-    await scope.ServiceProvider.GetRequiredService<DACContext>().Database.EnsureCreatedAsync();
+    await scope.ServiceProvider.GetRequiredService<DACContext>().Database.MigrateAsync();
 }
 await host.RunAsync();

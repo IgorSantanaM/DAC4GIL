@@ -56,6 +56,7 @@ public sealed class ImportOperationTransformer : IOpenApiOperationTransformer
         operation.Responses ??= new OpenApiResponses();
         operation.Responses.Remove("200");
         operation.Responses["202"] = new OpenApiResponse { Description = "Importação enviada para processamento." };
+        operation.Responses["409"] = new OpenApiResponse { Description = "Ja existem registros para um dos anos informados. Resposta sem corpo." };
         operation.Responses["400"] = new OpenApiResponse { Description = "Arquivo ausente, formato inválido ou dados inválidos." };
         return Task.CompletedTask;
     }

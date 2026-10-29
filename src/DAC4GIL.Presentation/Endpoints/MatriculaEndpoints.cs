@@ -59,7 +59,9 @@ public class MatriculaEndpoints : IEndpoints
                     item.MatriculasTotal, item.MatriculaInicial, item.MatriculaAposCenso, item.Transferidos,
                     item.Cancelados, item.Falecido, item.Abandono, item.Aprovados, item.Reprovados, item.Cursando, item.OutrasSituacoes);
             }
-            await mediator.Send(new CreateMatriculaCommand(data), ct);
+            var result = await mediator.Send(new CreateMatriculaCommand(data), ct);
+            if (result == ImportMatriculasResult.YearAlreadyExists)
+                return Results.StatusCode(StatusCodes.Status409Conflict);
             return Results.Accepted(value: new { mensagem = "Importação enviada para processamento.", quantidade = data.Count });
         }
         catch (Exception ex) when (ex is JsonException or FormatException or OverflowException or MalformedLineException or DomainExceptions)

@@ -10,6 +10,9 @@ namespace DAC4GIL.Infra.Data.Repositories
 {
     public class MatriculaRepository(DACContext context) : Repository<Matricula, int>(context), IMatriculaRepository
     {
+        public Task<bool> ExistsForYearsAsync(int[] years, CancellationToken cancellationToken = default)
+            => context.Matriculas.AnyAsync(m => years.Contains(m.AnoReferencia), cancellationToken);
+
         public async Task<PagedResult<Matricula>> GetPagedResultAsync(
             int pageNumber,
             int pageSize,
