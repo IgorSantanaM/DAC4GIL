@@ -6,6 +6,8 @@ namespace DAC4GIL.Domain.Matriculas
 {
     public interface IMatriculaRepository : IRepository<Matricula, int>
     {
+        Task<bool> ExistsForYearsAsync(int[] years, CancellationToken cancellationToken = default);
+
         public Task<PagedResult<Matricula>> GetPagedResultAsync(int pageNumber, int pageSize, string? searchTerm = null, CancellationToken cancellationToken = default);
     }
 }
