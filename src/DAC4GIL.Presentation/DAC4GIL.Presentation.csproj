@@ -22,4 +22,15 @@
   <ItemGroup>
     <ProjectReference Include="..\DAC4GIL.Infra.CrossCutting\DAC4GIL.Infra.CrossCutting.csproj" />
   </ItemGroup>
+  <!-- The API references Messaging DTOs, but must publish its own configuration. -->
+  <Target Name="ExcludeWorkerSettingsFromApiPublish" AfterTargets="ComputeFilesToPublish">
+    <PropertyGroup>
+      <WorkerSettingsPath>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)/../DAC4GIL.Messaging/appsettings.json'))</WorkerSettingsPath>
+      <WorkerDevelopmentSettingsPath>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)/../DAC4GIL.Messaging/appsettings.Development.json'))</WorkerDevelopmentSettingsPath>
+    </PropertyGroup>
+    <ItemGroup>
+      <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)"
+        Condition="'%(ResolvedFileToPublish.FullPath)' == '$(WorkerSettingsPath)' Or '%(ResolvedFileToPublish.FullPath)' == '$(WorkerDevelopmentSettingsPath)'" />
+    </ItemGroup>
+  </Target>
 </Project>

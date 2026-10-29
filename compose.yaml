@@ -1,4 +1,53 @@
 services:
+  dac.api:
+    image: ${DOCKER_REGISTRY-}dac4gil-api
+    build:
+      context: .
+      dockerfile: src/DAC4GIL.Presentation/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: 8080
+      ConnectionStrings__Postgres: Host=postgres;Port=5432;Database=dac4gil;Username=postgres;Password=postgres
+      ConnectionStrings__RabbitMQ: host=rabbitmq;port=5672;virtualHost=/;username=dac4gil;password=dac4gil;publisherConfirms=true
+    ports:
+      - "${API_PORT:-7081}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
+  dac.worker:
+    image: ${DOCKER_REGISTRY-}dac4gil-worker
+    build:
+      context: .
+      dockerfile: src/DAC4GIL.Messaging/Dockerfile
+    environment:
+      DOTNET_ENVIRONMENT: Production
+      ConnectionStrings__Postgres: Host=postgres;Port=5432;Database=dac4gil;Username=postgres;Password=postgres
+      ConnectionStrings__RabbitMQ: host=rabbitmq;port=5672;virtualHost=/;username=dac4gil;password=dac4gil;publisherConfirms=true
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
+  dac.frontend:
+    image: ${DOCKER_REGISTRY-}dac4gil-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "${FRONTEND_PORT:-8080}:80"
+    depends_on:
+      dac.api:
+        condition: service_started
+      dac.worker:
+        condition: service_started
+    restart: unless-stopped
+
   postgres:
     image: postgres:17
     environment:
@@ -6,16 +55,34 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d dac4gil"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
   rabbitmq:
     image: rabbitmq:4-management
+    environment:
+      RABBITMQ_DEFAULT_USER: dac4gil
+      RABBITMQ_DEFAULT_PASS: dac4gil
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - "${RABBITMQ_PORT:-5672}:5672"
+      - "${RABBITMQ_MANAGEMENT_PORT:-15672}:15672"
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "check_running"]
+      interval: 5s
+      timeout: 10s
+      retries: 12
+      start_period: 20s
+    restart: unless-stopped
+
 volumes:
   postgres_data:
   rabbitmq_data:

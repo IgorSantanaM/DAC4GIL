@@ -18,15 +18,15 @@ O `servidor.py` serve o painel e repassa as chamadas `/api/*` para o backend. As
 Quando a API não responde, o painel usa a cópia local dos CSVs oficiais (`data/matriculas.js`).
 O indicador no topo mostra qual fonte está em uso: **API** (verde) ou **Dados locais** (amarelo).
 
-Para subir o backend, é preciso Docker e .NET 10. Rode os comandos na raiz do repositório:
+Para subir frontend e backend em containers, execute na raiz do repositorio:
 
 ```bash
-docker compose up -d
-dotnet run --project src/DAC4GIL.Messaging
-dotnet run --project src/DAC4GIL.Presentation --launch-profile http
+docker compose up -d --build
 ```
 
-O primeiro comando sobe o PostgreSQL e o RabbitMQ; os outros dois rodam o worker e a API.
+O Compose inicia Nginx, API, worker, PostgreSQL e RabbitMQ. Abra
+http://localhost:8080 para o painel e http://localhost:7081/swagger para o Swagger.
+Nginx repassa `/api/` para a API, mantendo a mesma origem no navegador.
 
 Para carregar os dados no banco, importe os CSVs da pasta `dados/csv/`, na raiz do repositório, em "Backend & importação" ou pelo Swagger.
 
