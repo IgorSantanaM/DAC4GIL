@@ -1,5 +1,4 @@
-Dockerfile
-README.md
-servidor.py
-scripts/
-**/__pycache__/
+node_modules
+dist
+legado
+*.md
